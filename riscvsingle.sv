@@ -110,7 +110,7 @@ module testbench();
   always @(negedge clk)
     begin
       if(MemWrite) begin
-        if(DataAdr === 108 & WriteData === 32'd25) begin
+        if(DataAdr === 108 & WriteData === 32'hABCDE7D5) begin
           $display("Simulation succeeded");
           $stop;
         end else if (DataAdr !== 96) begin
@@ -229,6 +229,7 @@ module aludec(input  logic       opb5,
                  3'b010:    ALUControl = 3'b101; // slt, slti
                  3'b110:    ALUControl = 3'b011; // or, ori
                  3'b111:    ALUControl = 3'b010; // and, andi
+                 3'b100:    ALUControl = 3'b100;
                  default:   ALUControl = 3'bxxx; // ???
                endcase
     endcase
@@ -387,10 +388,11 @@ module alu(input  logic [31:0] a, b,
       3'b001:  result = sum;
       3'b010:  result = a&b;
       3'b011:  result = a|b;
+      3'b100:  result = a^b;
       3'b101:  result = sum[31]^v;
       3'b110:  result = a<<b[4:0];
       3'b111:  result = a>>b[4:0];
-
+      
       default: result = 32'bx;
     endcase
 
